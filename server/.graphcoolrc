@@ -1,0 +1,3 @@
+targets:
+  graphchat: shared-eu-west-1/cjnkoms5n99cn01816lkc3qdu
+  default: graphchat

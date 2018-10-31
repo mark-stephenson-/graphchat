@@ -1,0 +1,9 @@
+.no-bullets {
+    list-style-type: none;
+}
+
+.chat-history {
+    padding: 15px 15px 10px;
+    overflow-y: scroll;
+    height: 575px;
+  }

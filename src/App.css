@@ -2,31 +2,99 @@
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
+.container {
+  width: 40%;
+  min-width: 300px;
+  min-height: 600px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  display: inline-block;
+  vertical-align: top;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+h2 {
+  font-size: 18px;
+  background: #3FB1DE;
+  padding: 15px;
+  color: #fff;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
 }
 
-.App-link {
-  color: #61dafb;
+input {
+  width: 100%;
+  border-radius: 0 !important;
+  border-bottom-left-radius: 4px !important;
+  border-bottom-right-radius: 4px !important;
+  position: absolute;
+  bottom: -20px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.chat-list-container {
+  margin: 0 5px;
+  height: 652px;
+  width: 20%;
+  min-width: 240px;
+  background: #444753;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.people-list {
+  width:260px;
+  float: left;
+}
+  .people-list ul {
+    padding: 10px;
+}
+
+.people-list  li {
+      padding-bottom: 10px;
+      padding-left: 5px;
+      list-style-type: none;
+      margin-right: 20px;
+      background: #C2C2C2;
+      color: black;
+      -webkit-border-radius: 5px;
+      -webkit-border-bottom-left-radius: 5;
+      -moz-border-radius: 5px;
+      -moz-border-radius-bottomleft: 0;
+      border-radius: 5px;
+      border-bottom-left-radius: 0;
+    }
+
+.people-list  img {
+    float: left;
+    width: 30px;
+    margin-top: 8px;
   }
-  to {
-    transform: rotate(360deg);
+
+.people-list  .about {
+    float: left;
+    margin-top: 5px;
+    padding-left: 5px;
   }
+
+.people-list .name {
+
+}
+
+.people-list .status {
+  color: #222;
+  font-size: 8px
+}
+
+.people-list .last-seen {
+  color: #444;
+  font-size: 8px;
+}
+
+
+.clearfix:after {
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
 }
