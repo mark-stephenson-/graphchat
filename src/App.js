@@ -36,24 +36,29 @@ class App extends Component {
     }
   }
 
-
   _get_chat_list = async() => {
     let chatList = await this.props.client.query({ query: ALL_CHATS_QUERY });
-    this.setState({all_chats: chatList.data.allChats});
+    console.log(chatList.data.allChats);
+    let s = [];
+    let all_chats = [];
+    for(var chat of chatList.data.allChats){
+      if(!s.includes(chat.from)) {
+        all_chats.push(chat)
+        s.push(chat.from)
+      }
+    }
+    this.setState({all_chats});
   }
 
   _get_customer_chats = async () => {
-
-
     const { client } = this.props
-    const callback = this._appendVisibleMessage;
+    const callback = this._appendMessages;
 
     const test = client.query({
       query: CUSTOMER_CHATS_QUERY,
       variables: { personName: this.state.from }
     }).then(response => {
-
-      this.setState({ visible_messages: response.data.allChats});
+      callback(response, "init");
 
       //Set Up Subscription
       this.currentSubscription = client.subscribe({
@@ -77,17 +82,60 @@ class App extends Component {
         (message.from === selected_chat) ||
         (message.from === 'Jo' && message.to === selected_chat)
       ){
-        this._appendVisibleMessage(message)
+        this._appendMessages(message)
     }
   }
 
-  _appendVisibleMessage = (message) => {
+  __appendMessages = (message) => {
     this.setState((prevState) => {
       const { visible_messages } = prevState;
       visible_messages.push(message);
       return {visible_messages};
     })
   }
+
+  _parse_system_messages = (message) => {
+    console.log('-->', message);
+    return JSON.parse(message[0].content.slice(1,-1));
+  }
+
+  _appendMessages = (messages, mode) => {
+
+    switch (mode) {
+      case "init":
+        //Get invisible_messages from history
+        let invisible_messages = messages.data.allChats.filter(
+          message => {
+            return message.content.startsWith("{[{")
+          }
+        );
+        console.log('invisible_messages', invisible_messages);
+        let last_invisible =  invisible_messages.slice(-1);
+        console.log('last inv', last_invisible);
+        let context_cards = this._parse_system_messages(last_invisible);
+        let visible_messages = messages.data.allChats.filter(message => { return !message.content.startsWith("{[") });
+
+        //Set messages that need to be displayed
+        this.setState({
+          visible_messages,
+          context_cards
+        });
+        break;
+      default:
+        this.setState((prevState) => {
+          const { visible_messages, context_cards } = prevState;
+          if(messages.content.startsWith("{[")){
+            return {context_cards: this._parse_system_messages([messages])};
+          } else {
+            visible_messages.push(messages);
+            return {visible_messages};
+          }
+        })
+
+    }
+
+  }
+
 
   _subscribeToNewChats = (callback) => {
 
@@ -116,10 +164,6 @@ class App extends Component {
     }
   };
 
-  handle_context_set = (context_cards) => {
-    this.setState({context_cards});
-  }
-
   handle_chat_select = personName => {
     const { client } = this.props
     client.query({query: SELECTED_CHATS_QUERY, variables: { from: personName }})
@@ -136,7 +180,7 @@ class App extends Component {
 
   render() {
 
-    const { all_chats, visible_messages, context_cards } = this.state;
+    const { all_chats, visible_messages, context_cards, to } = this.state;
 
     return (
       <div className="">
@@ -157,7 +201,7 @@ class App extends Component {
         )} />
         <div className="container">
           <div>
-            <h2>Talking with: <strong>stone-by-stone</strong></h2>
+            <h2>Talking with: <strong>{to}</strong></h2>
             <Chatbox mode={this.props.mode} chats={visible_messages} changecontext={this.handle_context_set} />
             <input
               value={this.state.content}

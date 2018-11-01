@@ -6,4 +6,6 @@
     padding: 15px 15px 10px;
     overflow-y: scroll;
     height: 575px;
+    display: flex;
+    flex-direction: column-reverse;
   }

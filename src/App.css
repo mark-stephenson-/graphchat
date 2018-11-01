@@ -98,3 +98,8 @@ input {
 	clear: both;
 	height: 0;
 }
+
+.contextWindow {
+  display: inline-block;
+  padding-left: 10px
+}
