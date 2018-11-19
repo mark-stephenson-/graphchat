@@ -32,13 +32,11 @@ const link = split(
   httpLink,
 )
 
-
 const client = new ApolloClient({
   link,
   cache: new InMemoryCache(),
   defaultOptions: { query: { fetchPolicy: 'network-only' } }
 })
-
 
 ReactDOM.render(
 

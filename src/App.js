@@ -86,14 +86,6 @@ class App extends Component {
     }
   }
 
-  __appendMessages = (message) => {
-    this.setState((prevState) => {
-      const { visible_messages } = prevState;
-      visible_messages.push(message);
-      return {visible_messages};
-    })
-  }
-
   _parse_system_messages = (message) => {
     console.log('-->', message);
     return JSON.parse(message[0].content.slice(1,-1));
@@ -101,24 +93,26 @@ class App extends Component {
 
   _appendMessages = (messages, mode) => {
 
+
     switch (mode) {
       case "init":
         //Get invisible_messages from history
         let invisible_messages = messages.data.allChats.filter(
           message => {
-            return message.content.startsWith("{[{")
+            console.log(message);
+            return message.content.startsWith("{[")
           }
-        );
+        ) || [];
         console.log('invisible_messages', invisible_messages);
         let last_invisible =  invisible_messages.slice(-1);
         console.log('last inv', last_invisible);
-        let context_cards = this._parse_system_messages(last_invisible);
+        //let context_cards = this._parse_system_messages(last_invisible);
         let visible_messages = messages.data.allChats.filter(message => { return !message.content.startsWith("{[") });
 
         //Set messages that need to be displayed
         this.setState({
           visible_messages,
-          context_cards
+        //  context_cards
         });
         break;
       default:
